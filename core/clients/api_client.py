@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from core.settings.environments import Environment
 
-load_dotenv()
+load_dotenvv()
 
 class ApiClient:
     def __init__(self):
