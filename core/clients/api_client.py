@@ -73,5 +73,5 @@ class ApiClient:
             response = requests.get(url, headers=self.headers)
             response.raise_for_status()
         with allure.step('Assert status code'):
-            assert response.status_code == 201, f"Expected status 201 but got {response.status_code}"
+            assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
             return response.json()
