@@ -70,7 +70,7 @@ class ApiClient:
     def get_booking_by_id(self, booking_id):
         with allure.step('Getting Booking by ID'):
             url = f"{self.base_url}{Endpoints.BOOKING_ENDPOINT}/{booking_id}"
-            response = requests.get(url, headers=self.headers)
+            response = self.session.get(url)
             response.raise_for_status()
         with allure.step('Assert status code'):
             assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
