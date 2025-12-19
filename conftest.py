@@ -42,3 +42,18 @@ def generate_random_booking_data(booking_dates):
     }
 
     return data
+
+
+@pytest.fixture
+def booking_response():
+    return {
+        "firstname": "Jobs",
+        "lastname": "Nike",
+        "totalprice": 313,
+        "depositpaid": True,
+        "bookingdates": {
+            "checkin": "2025-12-20",
+            "checkout": "2025-12-25"
+        },
+        "additionalneeds": "Process"
+    }
