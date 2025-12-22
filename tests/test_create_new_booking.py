@@ -70,7 +70,8 @@ def test_create_booking_missing_fields():
     expected_message = "Internal Server Error"
     assert expected_message in response_text, f"Ожидалась строка '{expected_message}' в тексте ответа."
 
-
+@allure.feature('Test ping')
+@allure.story('Test timeout')
 # Проверка поведения метода в случае, если сервер вернул таймаут
 def test_create_booking_timeout(api_client, mocker):
     # Меняем  post-метод на метод, для получения Timeout
@@ -79,3 +80,13 @@ def test_create_booking_timeout(api_client, mocker):
     # Ожидаем исключение Timeout
     with pytest.raises(requests.Timeout):
         api_client.create_booking(BOOKING_URL, {})
+
+        # Проверка реакции метода на ответ 500 от сервера
+
+@allure.feature('Test Create Booking')
+@allure.story('Test booking creation with reaction_status_code')
+
+def test_create_booking_reaction_status_code_500(api_client, mocker):
+    mock_response = mocker.Mock(status_code=500)
+    mocker.patch.object(api_client.session, 'post', return_value=mock_response)
+    assert mock_response == 500, f"Expected status 500 but got {mock_response}"
