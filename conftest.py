@@ -42,11 +42,3 @@ def generate_random_booking_data(booking_dates):
     }
 
     return data
-
-@pytest.fixture
-def booking_response():
-
-    return {
-        "booking_id": 123,
-        "status": "confirmed"
-    }
