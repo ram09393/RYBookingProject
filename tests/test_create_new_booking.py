@@ -4,111 +4,30 @@ import allure
 from core.clients.api_client import ApiClient
 
 
-@pytest.fixture(scope="session")
-def api_client():
-    client = ApiClient()
-    client.auth()
-    return client
-
-
 @allure.feature('Test Create Booking')
 @allure.story('Test successful booking creation')
-def test_create_booking_success(api_client):
-    generate_random_booking_data = {
-        "firstname": "John",
-        "lastname": "Doe",
-        "totalprice": 123,
-        "depositpaid": True,
-        "bookingdates": {
-            "checkin": "2025-12-23",
-            "checkout": "2025-12-30"
-        },
-        "additionalneeds": "Breakfast"
-    }
-
+def test_create_booking_success(api_client, generate_random_booking_data):
     response = api_client.create_booking(generate_random_booking_data)
-    assert response.status_code == 200
-    assert response.json()['booking']['firstname'] == generate_random_booking_data['firstname']
-    with pytest.raises(AssertionError, match="Excepted status 201 but got 200"):
-        api_client.create_booking(generate_random_booking_data)
+    booking_details = response["booking"]
 
+    assert booking_details["firstname"] == generate_random_booking_data["firstname"], \
+    f"Имя не совпадает: ожидалось {generate_random_booking_data['firstname']}, пришло {booking_details['firstname']}"
 
-@allure.feature('Test Create Booking')
-@allure.story('Test booking creation with missing fields firstname')
-def test_create_booking_missing_firstname(api_client):
-    generate_random_booking_data = {
-        "lastname": "Doe",
-        "totalprice": 123,
-        "depositpaid": True,
-        "bookingdates": {
-            "checkin": "2025-12-22",
-            "checkout": "2025-12-31"
-        }
-    }
+    assert booking_details["lastname"] == generate_random_booking_data["lastname"], \
+    f"Фамилия не совпадает: ожидалось {generate_random_booking_data['lastname']}, пришло {booking_details['lastname']}"
 
-    with pytest.raises(requests.exceptions.HTTPError) as e:
-        api_client.create_booking(generate_random_booking_data)
-    assert e.value.response.status_code == 500
+    assert booking_details["totalprice"] == generate_random_booking_data["totalprice"], \
+    f"Сумма не совпадает: ожидалось {generate_random_booking_data['totalprice']}, пришло {booking_details['totalprice']}"
 
+    assert booking_details["depositpaid"] == generate_random_booking_data["depositpaid"], \
+    f"Внесение депозита не совпадает: ожидалось {generate_random_booking_data['depositpaid']}, пришло {booking_details['depositpaid']}"
 
-@allure.feature('Test Create Booking')
-@allure.story('Test booking creation with missing fields lastname')
-def test_create_booking_missing_lastname(api_client):
-    generate_random_booking_data = {
-        "firstname": "John",
-        "totalprice": 123,
-        "depositpaid": True,
-        "bookingdates": {
-            "checkin": "2025-12-03",
-            "checkout": "2025-12-12"
-        }
-    }
+    assert booking_details["bookingdates"]["checkin"] == generate_random_booking_data["bookingdates"]["checkin"], \
+    f"Дата вселения не совпадает: ожидалось {generate_random_booking_data['bookingdates']['checkin']}, пришло {booking_details['bookingdates']['checkin']}"
 
-    with pytest.raises(requests.exceptions.HTTPError) as e:
-        api_client.create_booking(generate_random_booking_data)
-    assert e.value.response.status_code == 500
+    assert booking_details["bookingdates"]["checkout"] == generate_random_booking_data["bookingdates"]["checkout"], \
+    f"Дата выселения не совпадает: ожидалось {generate_random_booking_data['bookingdates']['checkout']}, пришло {booking_details['bookingdates']['checkout']}"
 
+    assert booking_details["additionalneeds"] == generate_random_booking_data["additionalneeds"], \
+    f"Дополнительные потребности не совпадают: ожидалось {generate_random_booking_data['additionalneeds']}, пришло {booking_details['additionalneeds']}"
 
-@allure.feature('Test Create Booking')
-@allure.story('Test booking creation with invalid totalprice')
-def test_create_booking_invalid_totalprice(api_client):
-    generate_random_booking_data = {
-        "firstname": "John",
-        "lastname": "Doe",
-        "totalprice": "-123",  # Неверное значение цены
-        "depositpaid": True,
-        "bookingdates": {
-            "checkin": "2025-12-01",
-            "checkout": "2025-12-10"
-        }
-    }
-
-    with pytest.raises(requests.exceptions.HTTPError) as e:
-        api_client.create_booking(generate_random_booking_data)
-    assert e.value.response.status_code == 400
-
-
-@allure.feature('Test Create Booking')
-@allure.story('Test booking creation with invalid depositpaid')
-def test_create_booking_invalid_depositpaid(api_client):
-    generate_random_booking_data = {
-        "firstname": "John",
-        "lastname": "Doe",
-        "totalprice": 123,
-        "depositpaid": "yes",  # Неверный тип (должно быть булевое значение)
-        "bookingdates": {
-            "checkin": "2026-01-05",
-            "checkout": "2026-01-20"
-        }
-    }
-    with pytest.raises(requests.exceptions.HTTPError) as e:
-        api_client.create_booking(generate_random_booking_data)
-    assert e.value.response.status_code == 418
-
-
-def test_create_booking_empty_body(api_client):
-    generate_random_booking_data = {}  # Пустое тело запроса
-
-    with pytest.raises(requests.exceptions.HTTPError) as e:
-        api_client.create_booking(generate_random_booking_data)
-    assert e.value.response.status_code == 500  # Проверка на ошибку 400

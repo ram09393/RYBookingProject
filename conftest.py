@@ -2,7 +2,7 @@ import pytest
 from core.clients.api_client import ApiClient
 from datetime import datetime, timedelta
 from faker import Faker
-
+import random
 
 @pytest.fixture(scope="session")
 def api_client():
@@ -28,7 +28,7 @@ def generate_random_booking_data(booking_dates):
     faker = Faker()
     firstname = faker.first_name()
     lastname = faker.last_name()
-    totalprice = faker.total_random_number(diqits=3)
+    totalprice = random.randint(100, 999)
     depositpaid = faker.boolean()
     additionalneeds = faker.sentence()
 

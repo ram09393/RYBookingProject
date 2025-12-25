@@ -1,3 +1,4 @@
+from wsgiref import headers
 import requests
 import os
 from dotenv import load_dotenv
@@ -20,10 +21,10 @@ class ApiClient:
 
         self.base_url = self.get_base_url(environment)
         self.session = requests.Session()
-        self.session.headers = {
-            "Content-Type": 'application/json'
-
-        }
+        self.session.headers.update({
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            })
 
     def get_base_url(self, environment: Environment) -> str:
         if environment == Environment.TEST:
@@ -92,7 +93,7 @@ class ApiClient:
             url = f"{self.base_url}{Endpoints.BOOKING_ENDPOINT.value}"
             response = self.session.post(url, json=booking_data, verify=False)
             response.raise_for_status()
-        with allure.step('Checking status code'):
+        with allure.step('Operation success check'):
             assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
             return response.json()
 
@@ -103,7 +104,7 @@ class ApiClient:
             response.raise_for_status()
         with allure.step('Checking status code'):
             assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
-            return response.json()
+            return response
 
     def update_booking(self, booking_id):
         with allure.step('Updating booking'):
