@@ -21,10 +21,7 @@ class ApiClient:
 
         self.base_url = self.get_base_url(environment)
         self.session = requests.Session()
-        self.session.headers.update({
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            })
+
 
     def get_base_url(self, environment: Environment) -> str:
         if environment == Environment.TEST:
@@ -95,7 +92,7 @@ class ApiClient:
             response.raise_for_status()
         with allure.step('Operation success check'):
             assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
-            return response.json()
+            return {"data": response.json(), "status_code": response.status_code}
 
     def get_bookings_ids(self, params=None):
         with allure.step('Setting object with bookings'):
