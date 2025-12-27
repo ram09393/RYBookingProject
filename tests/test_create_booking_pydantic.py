@@ -99,6 +99,9 @@ def test_create_booking_max_string_length(api_client):
     response = api_client.create_booking(booking_data)
     booking_details = response["booking"]
 
+    expected_statuses = [200, 400, 500]  # Ожидаемые коды: ошибка валидации или внутренний сбой
+    message = response.get("message", "")
+
     assert booking_details["firstname"] == booking_data["firstname"], \
         f"Имя не совпадает: ожидалось {booking_data['firstname']}, пришло {booking_details['firstname']}"
 
