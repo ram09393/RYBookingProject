@@ -60,7 +60,7 @@ def test_create_booking_invalid_date_format(api_client, booking_dates):
     }
 
     response = api_client.create_booking(booking_data)
-    expected_statuses = [200, 400, 500]  # Ожидаемые коды: ошибка валидации или внутренний сбой
+    expected_status = [200]
     message = response.get("message", "")
 
 
@@ -78,7 +78,7 @@ def test_create_booking_checkout_before_checkin(api_client, booking_dates):
     }
 
     response = api_client.create_booking(booking_data)
-    expected_statuses = [200, 400, 500]  # Ожидаемые коды: ошибка валидации или внутренний сбой
+    expected_status = [200]
     message = response.get("message", "")
 
 
@@ -99,7 +99,7 @@ def test_create_booking_max_string_length(api_client):
     response = api_client.create_booking(booking_data)
     booking_details = response["booking"]
 
-    expected_statuses = [200, 400, 500]  # Ожидаемые коды: ошибка валидации или внутренний сбой
+    expected_status = [200]
     message = response.get("message", "")
 
     assert booking_details["firstname"] == booking_data["firstname"], \
