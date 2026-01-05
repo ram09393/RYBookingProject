@@ -185,13 +185,13 @@ def test_create_booking_max_string_length(api_client):
     # Получаем тело ответа в виде словаря
     response_json = response.json()
 
-    assert response_json['booking']['firstname'] == booking_data['firstname'], "Имена не совпадают"
-    assert response_json['booking']['lastname'] == booking_data['lastname'], "Фамилии не совпадают"
-    assert response_json['booking']['totalprice'] == booking_data['totalprice'], "Цены не совпадают"
-    assert response_json['booking']['depositpaid'] == booking_data['depositpaid'], "Депозит не совпадает"
+    assert response_json['booking']['firstname'] == booking_data['firstname']
+    assert response_json['booking']['lastname'] == booking_data['lastname']
+    assert response_json['booking']['totalprice'] == booking_data['totalprice']
+    assert response_json['booking']['depositpaid'] == booking_data['depositpaid']
     assert response_json['booking']['bookingdates']['checkin'] == booking_data['bookingdates'][
-        'checkin'], "Check-In даты не совпадают"
+        'checkin']
     assert response_json['booking']['bookingdates']['checkout'] == booking_data['bookingdates'][
-        'checkout'], "Check-Out даты не совпадают"
+        'checkout']
     assert response_json['booking']['additionalneeds'] == booking_data[
-        'additionalneeds'], "Дополнительные потребности не совпадают"
+        'additionalneeds']
