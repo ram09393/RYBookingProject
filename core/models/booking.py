@@ -14,9 +14,9 @@ class Booking(BaseModel):
     totalprice: int
     depositpaid: bool
     bookingdates: BookingDates
-    additionalneeds: Optional[str] = None
+    additionalneeds: Optional[str]
 
 
 class BookingResponse(BaseModel):
-    bookingid: int
     booking: Booking
+    bookingid: int
