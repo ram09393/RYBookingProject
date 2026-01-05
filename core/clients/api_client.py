@@ -92,7 +92,7 @@ class ApiClient:
             response.raise_for_status()
         with allure.step('Operation success check'):
             assert response.status_code == 200, f"Expected status 200 but got {response.status_code}"
-            return response.json()
+            return response
 
     def get_bookings_ids(self, params=None):
         with allure.step('Setting object with bookings'):

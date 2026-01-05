@@ -1,8 +1,13 @@
+from unittest.mock import Mock
+
 import pytest
+from pytest_mock import mocker
+
 from core.clients.api_client import ApiClient
 from datetime import datetime, timedelta
 from faker import Faker
 import random
+
 
 @pytest.fixture(scope="session")
 def api_client():

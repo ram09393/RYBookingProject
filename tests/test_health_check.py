@@ -1,6 +1,8 @@
 import allure
 import pytest
 import requests
+from pytest_mock import mocker
+from core.clients import api_client
 
 
 @allure.feature('Test ping')
@@ -64,3 +66,4 @@ def test_ping_timeout(api_client, mocker):
     mocker.patch.object(api_client.session, 'get', side_effect=requests.Timeout)
     with pytest.raises(requests.Timeout):
         api_client.ping()
+
